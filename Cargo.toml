@@ -1,0 +1,16 @@
+[package]
+name = "ren"
+version = "0.0.1"
+edition = "2021"
+description = "Simple and easy to use graphics library"
+documentation = "https://docs.rs/ren"
+keywords = ["gl", "opengl", "khronos", "graphics", "gamedev"]
+categories = ["game-development", "graphics", "rendering"]
+repository = "https://github.com/vallentin/ren"
+license = "Zlib"
+readme = "README.md"
+
+[dependencies]
+gl = "0.14"
+glfw = "0.51"
+glfw-ext = "0.1"
