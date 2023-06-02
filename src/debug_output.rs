@@ -56,6 +56,22 @@ pub(crate) extern "system" fn debug_output(
     message: *const i8,
     _user_param: *mut c_void,
 ) {
+    // All OpenGL Errors, shader compilation/linking errors, or highly-dangerous undefined behavior
+    // use gl::DEBUG_SEVERITY_HIGH as HIGH;
+    // Major performance warnings, shader compilation/linking warnings, or the use of deprecated functionality
+    // use gl::DEBUG_SEVERITY_MEDIUM as MEDIUM;
+    // Redundant state change performance warning, or unimportant undefined behavior
+    // use gl::DEBUG_SEVERITY_LOW as LOW;
+    // Anything that isn't an error or performance issue.
+    use gl::DEBUG_SEVERITY_NOTIFICATION as NOTIFICATION;
+    // Reference: https://www.khronos.org/opengl/wiki/Debug_Output
+
+    match (id, severity) {
+        // Ignore "buffer will use video memory as source" notifications
+        (131_185, NOTIFICATION) => return,
+        _ => {}
+    }
+
     let message = unsafe {
         CStr::from_bytes_with_nul_unchecked(slice::from_raw_parts(
             message as *const u8,
