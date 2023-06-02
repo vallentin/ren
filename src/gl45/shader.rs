@@ -177,10 +177,7 @@ impl Drop for ShaderStage<'_> {
 
 impl fmt::Debug for ShaderStage<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_tuple("ShaderStage")
-            .field(&self.handle)
-            .field(&self.kind)
-            .finish()
+        write!(f, "Shader({}, {:?})", self.handle, self.kind)
     }
 }
 
@@ -328,7 +325,7 @@ impl Drop for Shader<'_> {
 
 impl fmt::Debug for Shader<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_tuple("Shader").field(&self.handle).finish()
+        write!(f, "Shader({})", self.handle)
     }
 }
 

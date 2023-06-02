@@ -2,13 +2,22 @@
 #![allow(unsafe_code)]
 
 pub mod prelude {
+    pub use super::array::prelude::*;
+    pub use super::attrib::prelude::*;
+    pub use super::buffer::prelude::*;
     pub use super::shader::prelude::*;
 
     pub use super::RenderingContext;
 }
 
+mod array;
+mod attrib;
+mod buffer;
 mod shader;
 
+pub use self::array::*;
+pub use self::attrib::*;
+pub use self::buffer::*;
 pub use self::shader::*;
 
 use std::fmt;
@@ -78,6 +87,36 @@ impl<'gl> RenderingContext<'gl> {
         unsafe {
             gl::Clear(gl::COLOR_BUFFER_BIT);
         }
+    }
+
+    #[inline]
+    pub fn create_buffer(&mut self) -> Buffer<'gl> {
+        Buffer::new(self)
+    }
+
+    #[inline]
+    pub fn create_buffers<const N: usize>(&mut self) -> [Buffer<'gl>; N] {
+        Buffer::new_multi(self)
+    }
+
+    #[inline]
+    pub fn create_buffer_with_data<T: Copy>(
+        &mut self,
+        usage: BufferUsage,
+        data: &[T],
+    ) -> Buffer<'gl> {
+        Buffer::with_data(self, usage, data)
+    }
+
+    #[inline]
+    pub fn create_vertex_array<'a>(
+        &mut self,
+        desc: impl AsRef<VertexArrayDesc<'gl, 'a>>,
+    ) -> VertexArray<'gl>
+    where
+        'gl: 'a,
+    {
+        VertexArray::new(self, desc)
     }
 
     #[inline]
