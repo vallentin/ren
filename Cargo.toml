@@ -1,6 +1,6 @@
 [package]
 name = "ren"
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 description = "Simple and easy to use graphics library"
 documentation = "https://docs.rs/ren"
@@ -9,6 +9,9 @@ categories = ["game-development", "graphics", "rendering"]
 repository = "https://github.com/vallentin/ren"
 license = "Zlib"
 readme = "README.md"
+
+[badges]
+maintenance = { status = "experimental" }
 
 [features]
 default = ["glam"]
