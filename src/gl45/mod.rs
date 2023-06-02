@@ -6,6 +6,7 @@ pub mod prelude {
     pub use super::attrib::prelude::*;
     pub use super::buffer::prelude::*;
     pub use super::shader::prelude::*;
+    pub use super::texture::prelude::*;
     pub use super::uniform::prelude::*;
 
     pub use super::RenderingContext;
@@ -15,12 +16,14 @@ mod array;
 mod attrib;
 mod buffer;
 mod shader;
+mod texture;
 mod uniform;
 
 pub use self::array::*;
 pub use self::attrib::*;
 pub use self::buffer::*;
 pub use self::shader::*;
+pub use self::texture::*;
 pub use self::uniform::*;
 
 use std::fmt;
@@ -74,6 +77,8 @@ impl<'gl> RenderingContext<'gl> {
     /// OpenGL context. The returned `RenderingContext` must only
     /// exist, while the OpenGL context is valid.
     pub unsafe fn new() -> Self {
+        self::texture::init();
+
         Self {
             phantom: PhantomData,
         }
@@ -121,6 +126,15 @@ impl<'gl> RenderingContext<'gl> {
         'gl: 'a,
     {
         VertexArray::new(self, desc)
+    }
+
+    #[inline]
+    pub fn create_texture(
+        &mut self,
+        size: (u32, u32),
+        internal_format: InternalFormat,
+    ) -> Texture<'gl> {
+        Texture::new(self, size, internal_format)
     }
 
     #[inline]
