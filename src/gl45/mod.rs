@@ -6,6 +6,7 @@ pub mod prelude {
     pub use super::attrib::prelude::*;
     pub use super::buffer::prelude::*;
     pub use super::shader::prelude::*;
+    pub use super::uniform::prelude::*;
 
     pub use super::RenderingContext;
 }
@@ -14,11 +15,13 @@ mod array;
 mod attrib;
 mod buffer;
 mod shader;
+mod uniform;
 
 pub use self::array::*;
 pub use self::attrib::*;
 pub use self::buffer::*;
 pub use self::shader::*;
+pub use self::uniform::*;
 
 use std::fmt;
 use std::marker::PhantomData;
@@ -43,6 +46,7 @@ pub trait GLHandle {
 /// If needed, the inner OpenGL handle can be extracted
 /// by calling <code>handle.[gl_handle()](RawGLHandle::gl_handle)</code>.
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug)]
+#[repr(transparent)]
 pub struct RawGLHandle(pub(crate) u32);
 
 impl GLHandle for RawGLHandle {

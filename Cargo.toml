@@ -10,8 +10,13 @@ repository = "https://github.com/vallentin/ren"
 license = "Zlib"
 readme = "README.md"
 
+[features]
+default = ["glam"]
+glam = ["dep:glam"]
+
 [dependencies]
 gl = "0.14"
+glam = { version = "0.24", optional = true }
 glfw = "0.51"
 glfw-ext = "0.1"
 thiserror = "1.0"

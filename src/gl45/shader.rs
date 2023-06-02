@@ -3,13 +3,14 @@ pub mod prelude {
 }
 
 use std::borrow::Cow;
+use std::ffi::{c_char, CStr};
 use std::fmt;
 use std::marker::PhantomData;
 use std::ptr;
 
 use thiserror::Error;
 
-use super::{GLHandle, RawGLHandle, RenderingContext};
+use super::{GLHandle, RawGLHandle, RenderingContext, UniformLocation};
 
 macro_rules! c_str {
     ($s:literal) => {
@@ -305,6 +306,47 @@ impl<'gl> Shader<'gl> {
     #[inline]
     pub unsafe fn bind(&self) {
         gl::UseProgram(self.handle);
+    }
+
+    /// Returns `None` if `name` does not correspond to an active uniform variable.
+    ///
+    /// Panics if `name` contains a nul byte.
+    #[inline]
+    pub fn get_uniform_location(&self, name: impl AsRef<str>) -> Option<UniformLocation> {
+        UniformLocation::get_uniform_location(self.handle, name)
+    }
+
+    /// Returns `None` if `name` does not correspond to an active uniform variable.
+    ///
+    /// Panics if `name` does not end with a nul byte, or
+    /// if `name` contains interior nul bytes.
+    #[inline]
+    pub fn get_uniform_location_from_bytes_with_nul(&self, name: &[u8]) -> Option<UniformLocation> {
+        UniformLocation::get_uniform_location_from_bytes_with_nul(self.handle, name)
+    }
+
+    pub unsafe fn get_uniform_location_from_bytes_with_nul_unchecked(
+        &self,
+        name: impl AsRef<[u8]>,
+    ) -> Option<UniformLocation> {
+        UniformLocation::get_uniform_location_from_bytes_with_nul_unchecked(self.handle, name)
+    }
+
+    #[inline]
+    pub fn get_uniform_location_from_c_str(
+        &self,
+        name: impl AsRef<CStr>,
+    ) -> Option<UniformLocation> {
+        UniformLocation::get_uniform_location_from_c_str(self.handle, name)
+    }
+
+    /// The `name` must be a null-terminated string.
+    #[inline]
+    pub unsafe fn get_uniform_location_from_c_char_ptr(
+        &self,
+        name: *const c_char,
+    ) -> Option<UniformLocation> {
+        UniformLocation::get_uniform_location_from_c_char_ptr(self.handle, name)
     }
 }
 
