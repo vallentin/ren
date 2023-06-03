@@ -261,7 +261,12 @@ fn init(opts: AppOptions<'_>, visible: bool) -> (Glfw, Window, EventReceiver) {
     glfw.window_hint(WindowHint::Visible(false));
 
     let (mut wnd, events) = glfw
-        .create_window(1280, 720, env!("CARGO_PKG_NAME"), WindowMode::Windowed)
+        .create_window(
+            opts.window_size.0,
+            opts.window_size.1,
+            env!("CARGO_PKG_NAME"),
+            WindowMode::Windowed,
+        )
         .unwrap();
 
     wnd.set_key_polling(true);
